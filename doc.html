@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Documentation | TLang</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        color: #333;
+        padding: 20px;
+      }
+      h1,
+      h2 {
+        color: #007bff;
+      }
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      pre {
+        background: #eee;
+        padding: 10px;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>TLang Programming Documentation</h1>
+      <p>
+        Welcome to the official documentation for Timmy's Interpreted
+        Programming Language, a modern and simple programming language.
+        <a href="./index.html" target="_blank">Try it out here</a>
+      </p>
+
+      <h2>Data Types</h2>
+      <p>Supported data types for variables.</p>
+      <pre>
+<b>String: </b>
+
+make str_one = "string 1";
+make str_two = `string 2`;
+make str_th = 'string 3';
+
+count(str_two) // Returns the length of the string. //Output: 8
+
+display(str_one * 3) // Output: "string 1string 1string 1"
+
+<b>Integer: </b>
+
+make num = 26;
+
+<b>Boolean: </b>
+
+make isCorrect = true;
+make notTrue = false;
+    </pre>
+
+      <h2>Operators</h2>
+      <p>Supported operators.</p>
+      <pre>
+<b>Arithmetic Operators: </b>
+
+make num = 3;
+
+Multiplication "*" display(num * num) //Output: 9
+
+Division "/" display(num / num) //Output: 1
+
+Addition "+" display(num + num) //Output: 6
+
+Subtraction "-" display(num - num) //Output: 0
+
+display(((num * num) + (num + num)) / num) //Output: 5
+
+
+<b>Logical Operators: </b>
+
+!true // false
+
+!false // true
+
+
+<b>Comparison operators: </b>
+
+3 == 3 // true
+
+3 > 4 // false
+
+4 < 5 // true
+  </pre>
+
+      <h2>Arrays</h2>
+      <p>Arrays store multiple values in a single variable.</p>
+      <pre>
+make arr = [1, 2, 3, 4]
+
+display(arr[1]) // Output: 2
+    </pre
+      >
+
+      <h2>Hashmaps</h2>
+      <p>Hashmaps (dictionaries) store key-value pairs.</p>
+      <pre>
+make map = {"name": "Alice", "age": 25}
+
+display(map["name"]) // Output: Alice
+    </pre
+      >
+
+      <h2>Built-in Functions</h2>
+      <p>
+        TLang provides several built-in functions for handling data and
+        computations.
+      </p>
+      <pre>
+display(element) // Outputs the element value.
+
+count(arr) // Returns the number of elements in an array.
+
+push(arr, element) //Adds a new element to an array. Returns a new array with the added element.
+
+first(arr) // Returns the first element in an array.
+
+last(arr)  // Returns the last element in an array.
+
+rest(arr) // Returns a new array without the first element.
+
+
+
+TODOS:  // To be added!
+
+keys(map)  // Returns all keys in a hashmap
+
+values(map) // Returns all values in a hashmap
+    </pre
+      >
+
+      <h2>Functions</h2>
+      <p>Functions are reusable blocks of code.</p>
+      <pre>
+make greet = fxn(name) {
+  return "Hello, " + name;
+}
+
+display(greet("Bob")); // Output: Hello, Bob
+    </pre
+      >
+
+      <h2>If-Else Conditional</h2>
+      <p>Conditional statements control program flow.</p>
+      <pre>
+make x = 10;
+
+if x > 5 {
+    display("x is greater than 5");
+} else {
+    display("x is less than or equal to 5");
+}
+    </pre
+      >
+    </div>
+  </body>
+</html>
