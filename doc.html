@@ -37,6 +37,27 @@
         Programming Language, a modern and simple programming language.
         <a href="./index.html" target="_blank">Try it out here</a>
       </p>
+      <p>
+        Author: Timileyin E. Farayola |
+        <span>
+          <a href="https://linkedin.com/in/timileyin-farayola"
+            >https://linkedin.com/in/timileyin-farayola</a
+          ></span
+        >
+        |
+        <span
+          ><a href="https://github.com/rafmme"
+            >https://github.com/rafmme</a
+          ></span
+        >
+        |
+        <span
+          ><a href="mailto:timileyin.e.farayola@gmail.com"
+            >timileyin.e.farayola@gmail.com</a
+          ></span
+        >
+        | &copy; APRIL, 2025
+      </p>
 
       <h2>Data Types</h2>
       <p>Supported data types for variables.</p>
@@ -59,6 +80,10 @@ make num = 26;
 
 make isCorrect = true;
 make notTrue = false;
+
+<b>Null: </b>
+
+make a = null;
     </pre>
 
       <h2>Operators</h2>
@@ -142,28 +167,52 @@ values(map) // Returns all values in a hashmap
       >
 
       <h2>Functions</h2>
-      <p>Functions are reusable blocks of code.</p>
+      <p>
+        Functions are reusable blocks of code. Supports High-Order functions &
+        Closures.
+      </p>
       <pre>
 make greet = fxn(name) {
   return "Hello, " + name;
 }
 
 display(greet("Bob")); // Output: Hello, Bob
-    </pre
-      >
+
+
+
+<b>A recursive function that loops through an array and print all its element: </b>
+
+make loopThroughArray = fxn(arr) {
+  if(count(arr) == 0){
+    return null;
+  } else {
+      display(first(arr));
+
+      loopThroughArray(rest(arr));
+      return null;
+  }
+}
+
+
+make a = [74,0,1,2,3,4,5,6,7,8,9];
+
+loopThroughArray(a);
+    </pre>
 
       <h2>If-Else Conditional</h2>
       <p>Conditional statements control program flow.</p>
       <pre>
 make x = 10;
 
-if x > 5 {
+if (x > 5) {
     display("x is greater than 5");
 } else {
     display("x is less than or equal to 5");
 }
     </pre
       >
+
+      <h2>More features to be added soon. [WIP]</h2>
     </div>
   </body>
 </html>

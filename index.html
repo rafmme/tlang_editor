@@ -77,7 +77,7 @@
         font-family: monospace;
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
-        height: 270px;
+        height: 170px;
         overflow: scroll;
       }
 
@@ -124,7 +124,48 @@
         color: #00ff88;
       }
 
+      .input-line {
+        display: flex;
+      }
+
+      .prompt {
+        color: cyan;
+        margin-right: 5px;
+      }
+
+      .command {
+        flex-grow: 1;
+        outline: none;
+        color: white;
+        min-width: 100%;
+      }
+
+      #repl-terminal {
+        border: 1px solid #555;
+        padding: 10px;
+        background: black;
+        color: lime;
+        height: 100px;
+        overflow-y: auto;
+      }
+
+      .console-row {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        height: 300px;
+      }
+
       @media (min-width: 768px) {
+        .console-row {
+          flex-direction: row;
+        }
+
+        .console-panel,
+        #repl-terminal {
+          flex: 1;
+          height: 300px;
+        }
       }
     </style>
   </head>
@@ -142,20 +183,29 @@
               Toggle Light/Dark Mode
             </button>
           </div>
-          <div class="console-panel" id="console">
-            <pre id="logo">
-            ████████╗██╗      █████╗ ███╗   ██╗ ██████╗ 
-            ╚══██╔══╝██║     ██╔══██╗████╗  ██║██╔═══██╗
-               ██║   ██║     ███████║██╔██╗ ██║██║   ██║
-               ██║   ██║     ██╔══██║██║╚██╗██║██║   ██║
-               ██║   ███████╗██║  ██║██║ ╚████║╚██████╔╝
-               ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
-                 
-              Timmy's Interpreted Programming Language (TLANG)
-               :) Welcome to TLang IDE Terminal :) 🖐🏾 😎
-               <a href="./doc.html" id="doc-link" target="_blank">Click here to read the language documentation!</a>
-               </pre>
-            <pre id="terminal-output"></pre>
+          <div class="console-row">
+            <div class="console-panel" id="console">
+              <pre id="logo">
+              ████████╗██╗      █████╗ ███╗   ██╗ ██████╗ 
+              ╚══██╔══╝██║     ██╔══██╗████╗  ██║██╔═══██╗
+                 ██║   ██║     ███████║██╔██╗ ██║██║   ██║
+                 ██║   ██║     ██╔══██║██║╚██╗██║██║   ██║
+                 ██║   ███████╗██║  ██║██║ ╚████║╚██████╔╝
+                 ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ 
+                   
+                Timmy's Interpreted Programming Language (TLANG)
+                 :) Welcome to TLang IDE Terminal :) 🖐🏾 😎
+                 <a href="./doc.html" id="doc-link" target="_blank">Click here to read the language documentation!</a>
+                 </pre>
+              <pre id="terminal-output"></pre>
+            </div>
+            <div id="repl-terminal">
+              <div id="history"></div>
+              <div class="input-line">
+                <span class="prompt">TLang[cli]: > </span>
+                <span class="command" contenteditable="true"></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -163,6 +213,8 @@
 
     <!-- CodeMirror -->
     <script>
+      let terminalHistory = document.getElementById("history");
+
       CodeMirror.defineMode("tlang", function (config, parserConfig) {
         return {
           token: function (stream, state) {
@@ -212,40 +264,45 @@
         }
       );
 
-      localStorage.setItem(
-        "savedCode",
-        `make myName = ["Timileyin", \`Emmanuel\`, 'Farayola'];
-              \ndisplay(count(myName))
-              \ndisplay(push(myName, "Lekan"))
-              \nmake mapOfName = {"sn": myName[2], "fn": myName[0], "mn": myName[1]}
-              \ndisplay("Hello! " * 3);
-              \ndisplay("Hello! " + "3");
-              \nmake myAge = 20\n\ndisplay(myAge > 17)\n\ndisplay(myAge == 56)
-              \ndisplay(!true)
-              \nif (myAge > 17) {\n  display("I am an adult");\n} else {\n    display("I am a minor");\n}
-              \nmake joinMyName = fxn(firstName, middleName, surname){
+      const savedCodeInStorage = localStorage.getItem("savedCode");
+
+      if (!savedCodeInStorage || savedCodeInStorage.trim().length < 1) {
+        editor.setValue(
+          `make myName = ["Timileyin", \`Emmanuel\`, 'Farayola'];
+          \ndisplay(count(myName))
+                      \ndisplay(push(myName, "Lekan"))
+                      \nmake mapOfName = {"sn": myName[2], "fn": myName[0], "mn": myName[1]}
+                      \ndisplay("Hello! " * 3);
+                      \ndisplay("Hello! " + "3");
+                      \nmake myAge = 20\n\ndisplay(myAge > 17)\n\ndisplay(myAge == 56)
+                      \ndisplay(!true)
+                      \nif (myAge > 17) {\n  display("I am an adult");\n} else {\n    display("I am a minor");\n}
+          \nmake joinMyName = fxn(firstName, middleName, surname){
   return surname + " " + firstName + " " + middleName + ".";
 }\n
 make greetingsFromMe = fxn(){
   make greetings_one = "Hi there 🖐🏾!, I am "
-    + joinMyName(mapOfName["fn"], mapOfName["mn"], mapOfName["sn"])
+    + joinMyName(mapOfName["fn"], mapOfName["mn"], mapOfName["sn"])\n
   make greetings_two = greetings_one
-    + " Welcome to TLang: (Timmy,s Interpreted Programming Language)."
+    + " Welcome to TLang: (Timmy,s Interpreted Programming Language)."\n
   make greetings_three = greetings_two
     + " Feel free to code/interact with TLang on this editor. More features to be added soon. WIP.";
-
+  
   return greetings_three;
 }
-
+  
 display(greetingsFromMe())
-      `
-      );
+        `
+        );
+      }
 
       // Console log example
       const consolePanel = document.getElementById("terminal-output");
 
       function clearEditor() {
         editor.setValue("");
+        localStorage.removeItem("replHistory");
+        terminalHistory.innerHTML = "";
       }
 
       function toggleTheme() {
@@ -292,7 +349,7 @@ display(greetingsFromMe())
           go.run(result.instance);
           const tlangParseResult = parseTlang(code);
 
-          consolePanel.innerHTML = `TLang:> ${tlangParseResult}`;
+          consolePanel.innerHTML = `TLang(Editor):> ${tlangParseResult}`;
         });
       }
 
@@ -315,12 +372,72 @@ display(greetingsFromMe())
 
           let displayText = "";
           globalThis.fs.logput.forEach((item, index) => {
-            displayText += `TLang:> ${item}\n\n`;
+            displayText += `TLang(Editor):> ${item}\n\n`;
           });
 
           consolePanel.innerHTML = displayText;
         });
       }
+
+      // Load REPL history from localStorage
+      function loadHistory() {
+        document.getElementById("history").innerHTML =
+          localStorage.getItem("replHistory") || "";
+      }
+
+      // Save REPL history
+      function saveHistory() {
+        localStorage.setItem(
+          "replHistory",
+          document.getElementById("history").innerHTML
+        );
+      }
+
+      // REPL Terminal Logic
+      document
+        .getElementById("repl-terminal")
+        .addEventListener("keypress", function (event) {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            let commandElement = document.querySelector(".command");
+            let command = commandElement.innerText.trim();
+
+            // Process command
+            globalThis.fs.logput = [];
+            let output = "";
+
+            const go = new Go();
+            WebAssembly.instantiateStreaming(
+              fetch("main.wasm"),
+              go.importObject
+            ).then((result) => {
+              go.run(result.instance);
+              const codeExecutionResult = executeTlang(command);
+
+              if (globalThis.fs.logput.length < 1) {
+                terminalHistory.innerHTML += `<div><span class='prompt'>Output > </span>${codeExecutionResult}</div>`;
+              } else {
+                globalThis.fs.logput.forEach((item, index) => {
+                  output += `${item}\n`;
+                });
+
+                terminalHistory.innerHTML += `<div><span class='prompt'>Output > </span>${output}</div>`;
+              }
+            });
+
+            // Append input and output to history
+
+            terminalHistory.innerHTML += `<div><span class='prompt'>TLang > </span>${command}</div>`;
+
+            saveHistory(); // Persist REPL history
+
+            // Clear input for next command
+            commandElement.innerText = "";
+          }
+        });
+
+      // Load history when page starts
+      loadHistory();
     </script>
   </body>
 </html>
