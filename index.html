@@ -6,10 +6,18 @@
     <title>IDE | TLang</title>
     <link rel="stylesheet" href="./css/codemirror.min.css" />
     <link rel="stylesheet" href="./css/monokai.min.css" />
+    <script src="./js/all.min.js"></script>
     <script src="./js/codemirror.min.js"></script>
     <script src="./js/wasm_exec.js"></script>
 
     <style>
+      :root {
+        --bg-color: #1e1e1e;
+        --sidebar-color: linear-gradient(45deg, #333, #007bff);
+        --sidebar-shadow: 4px 0 10px rgba(0, 0, 0, 0.5);
+        --button-hover: rgba(255, 255, 255, 0.2);
+      }
+
       body,
       html {
         margin: 0;
@@ -81,25 +89,22 @@
         overflow: scroll;
       }
 
-      #buttons {
+      #sidebar {
+        width: 60px;
+        background: var(--sidebar-color);
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
         padding: 10px;
-        background: var(--toolbar-bg, #333);
-      }
-
-      button {
-        padding: 12px;
-        font-size: 16px;
-        color: white;
-        background: #007bff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      button:hover {
-        background: #0056b3;
+        gap: 15px;
+        position: relative;
+        transition: width 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        box-shadow: var(--sidebar-shadow);
+        resize: horizontal;
+        overflow: auto;
+        min-width: 60px;
+        max-width: 250px;
+        border-radius: 10px;
       }
 
       .cm-keyword {
@@ -156,6 +161,31 @@
         height: 300px;
       }
 
+      /* Buttons */
+      .icon-button {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        cursor: pointer;
+        color: white;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: transform 0.2s ease-in-out, background 0.3s ease-in-out;
+        padding: 10px;
+        border-radius: 8px;
+        backdrop-filter: blur(8px);
+      }
+
+      .icon-button:hover {
+        transform: scale(1.1);
+        background: var(--button-hover);
+      }
+
+      .icon-button span {
+        display: none;
+      }
+
       @media (min-width: 768px) {
         .console-row {
           flex-direction: row;
@@ -167,21 +197,32 @@
           height: 300px;
         }
       }
+
+      @media screen and (max-width: 600px) {
+        #sidebar {
+          flex-direction: column;
+          justify-content: center;
+        }
+      }
     </style>
   </head>
   <body>
     <div class="ide-container">
       <div class="main">
+        <div id="sidebar">
+          <button id="run" class="icon-button" onclick="executeCode()">
+            <i class="fas fa-play"></i> <span>Run</span>
+          </button>
+          <button class="icon-button" onclick="clearEditor()">
+            <i class="fas fa-trash"></i> <span>Clear</span>
+          </button>
+          <button class="icon-button" onclick="toggleTheme()">
+            <i class="fas fa-adjust"></i> <span>Theme</span>
+          </button>
+        </div>
         <div class="editor-area">
           <div class="editor-container">
             <textarea id="editor"></textarea>
-          </div>
-          <div id="buttons">
-            <button onclick="executeCode()" id="run">Run</button>
-            <button onclick="clearEditor()">Clear</button>
-            <button class="theme-switch" onclick="toggleTheme()">
-              Toggle Light/Dark Mode
-            </button>
           </div>
           <div class="console-row">
             <div class="console-panel" id="console">
@@ -358,7 +399,7 @@ display(greetingsFromMe())
 
       const runButton = document.getElementById("run");
       function executeCode() {
-        runButton.innerText = "Executing the code!!!";
+        runButton.innerHTML = `<i class="fas fa-play"></i> <span>Running code...</span>`;
         globalThis.fs.logput = [];
 
         const go = new Go();
@@ -367,7 +408,7 @@ display(greetingsFromMe())
           go.importObject
         ).then((result) => {
           go.run(result.instance);
-          runButton.innerHTML = "Run";
+          runButton.innerHTML = `<i class="fas fa-play"></i> <span>Run</span>`;
           executeTlang(editor.getValue());
 
           let displayText = "";
